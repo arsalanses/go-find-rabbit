@@ -1,14 +1,25 @@
 version: "3.2"
+
 services:
+  app:
+    image: "registry.go2tr.ir/arsalanse/go-find-rabbit:multistage"
+    container_name: 'go-find-rabbit'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_go_net
+
   rabbitmq:
     image: rabbitmq:management
     container_name: 'rabbitmq'
     ports:
         - 5672:5672
         - 15672:15672
-    # volumes:
-    #     - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-    #     - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    volumes:
+        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
     networks:
         - rabbitmq_go_net
 

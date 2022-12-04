@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -17,8 +16,6 @@ type Mail struct {
 type CreateMailRequest struct {
 	Mail string `json:"mail" binding:"required"`
 }
-
-var DB *gorm.DB
 
 var CONNECTION *amqp.Connection
 var CHANNEL *amqp.Channel
@@ -47,7 +44,7 @@ func ConnectQueue() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(queue.Name)
+	_ = queue
 }
 
 func PostMail(c *gin.Context) {
