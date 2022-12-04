@@ -11,6 +11,8 @@ RUN go mod download
 
 COPY . ./
 
+RUN go mod download golang.org/x/sys
+
 RUN go build -o go-find-rabbit
 
 ## Deploy
