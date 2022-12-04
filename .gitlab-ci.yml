@@ -8,8 +8,8 @@ compile-producer:
     - gitlab/dind
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t go-find-rabbit:multistage -f Dockerfile.multistage .
-    - docker push go-find-rabbit:multistage
+    - docker build -t $CI_REGISTRY_IMAGE:multistage -f Dockerfile.multistage .
+    - docker push $CI_REGISTRY_IMAGE:multistage
 
 deploy:
   stage: deploy
