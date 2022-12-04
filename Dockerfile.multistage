@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ## Build
-FROM golang:1.19-alpine
+FROM golang:1.19-alpine AS build
 
 WORKDIR /app
 
@@ -10,8 +10,6 @@ COPY go.sum ./
 RUN go mod download
 
 COPY . ./
-
-# RUN go mod download golang.org/x/sys
 
 RUN go build -o go-find-rabbit
 
