@@ -11,14 +11,14 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o go-find-rabbit
+RUN go build -o /go-find-rabbit
 
 ## Deploy
 FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
 
-COPY --from=build go-find-rabbit go-find-rabbit
+COPY --from=build /go-find-rabbit /go-find-rabbit
 
 EXPOSE 8080
 
