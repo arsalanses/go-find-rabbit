@@ -8,6 +8,7 @@ compile-producer:
     - gitlab/dind
   script:
     - docker build -t go-find-rabbit:multistage -f Dockerfile.multistage .
+    - docker images
 
 deploy:
   stage: deploy
