@@ -1,0 +1,27 @@
+# syntax=docker/dockerfile:1
+
+## Build
+FROM golang:1.16-alpine
+
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+
+COPY . ./
+
+RUN go build -o /go-find-rabbit
+
+## Deploy
+FROM gcr.io/distroless/base-debian10
+
+WORKDIR /
+
+COPY --from=build /go-find-rabbit /go-find-rabbit
+
+EXPOSE 8080
+
+USER nonroot:nonroot
+
+ENTRYPOINT ["/go-find-rabbit"]

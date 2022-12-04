@@ -1,0 +1,15 @@
+stages:
+  - build
+  - deploy
+
+compile-producer:
+  stage: build
+  services:
+    - gitlab/dind
+  script:
+    - docker build -t go-find-rabbit:multistage -f Dockerfile.multistage .
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  environment: production
