@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go mod download golang.org/x/sys
+# RUN go mod download golang.org/x/sys
 
 RUN go build -o go-find-rabbit
 
@@ -20,7 +20,7 @@ FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
 
-COPY --from=build /go-find-rabbit /go-find-rabbit
+COPY --from=build go-find-rabbit go-find-rabbit
 
 EXPOSE 8080
 
