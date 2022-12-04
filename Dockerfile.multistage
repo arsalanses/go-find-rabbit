@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -o /go-find-rabbit
+RUN go build -o go-find-rabbit
 
 ## Deploy
 FROM gcr.io/distroless/base-debian10
