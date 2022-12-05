@@ -8,13 +8,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type Mail struct {
+type Text struct {
 	gorm.Model
-	Mail string `json:"mail" gorm:"unique;not null"`
+	Text string `json:"text" gorm:"unique;not null"`
 }
 
-type CreateMailRequest struct {
-	Mail string `json:"mail" binding:"required"`
+type CreateTextRequest struct {
+	Text string `json:"text" binding:"required"`
 }
 
 var CONNECTION *amqp.Connection
@@ -34,7 +34,7 @@ func ConnectQueue() {
 	CHANNEL = channel
 
 	queue, err := channel.QueueDeclare(
-		"mail-sub", // name
+		"text-sub", // name
 		false,      // durable
 		false,      // auto delete
 		false,      // exclusive
@@ -47,31 +47,31 @@ func ConnectQueue() {
 	_ = queue
 }
 
-func PostMail(c *gin.Context) {
-	var input CreateMailRequest
+func PostText(c *gin.Context) {
+	var input CreateTextRequest
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	mail := Mail{Mail: input.Mail}
+	text := Text{Text: input.Text}
 
 	err := CHANNEL.Publish(
 		"",         // exchange
-		"mail-sub", // key
+		"text-sub", // key
 		false,      // mandatory
 		false,      // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(mail.Mail),
+			Body:        []byte(text.Text),
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"data": mail})
+	c.JSON(http.StatusCreated, gin.H{"data": text})
 }
 
 func main() {
@@ -81,7 +81,7 @@ func main() {
 	defer CONNECTION.Close()
 	defer CHANNEL.Close()
 
-	router.POST("/api/v1/subscription", PostMail)
+	router.POST("/api/v1/subscription", PostText)
 
 	err := router.Run("localhost:8080")
 
